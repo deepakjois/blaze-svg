@@ -11,12 +11,16 @@ category:            Graphics
 build-type:          Simple
 cabal-version:       >=1.6
 
+Extra-source-files:
+  Util/Sanitize.hs
+  Util/GenerateSvgCombinators.hs
+
 Library
   Ghc-Options:       -Wall
 
   Exposed-modules:
     Text.Blaze.Svg
---    Text.Blaze.Svg.Attributes
+    Text.Blaze.Svg.Attributes
     Text.Blaze.Svg.Internal
 
   Build-depends:
