@@ -1,5 +1,9 @@
+{-# LANGUAGE OverloadedStrings #-}
 module Text.Blaze.Svg where
 
 import Text.Blaze.Internal
+import Text.Blaze.Svg.Internal
 
-type Svg = HtmlM ()
+svg :: Svg
+     -> Svg
+svg = Parent "svg" "<svg" "</svg>"

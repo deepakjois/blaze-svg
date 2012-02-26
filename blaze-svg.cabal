@@ -17,7 +17,7 @@ Library
   Exposed-modules:
     Text.Blaze.Svg
 --    Text.Blaze.Svg.Attributes
---    Text.Blaze.Svg.Internal
+    Text.Blaze.Svg.Internal
 
   Build-depends:
     base          >= 4 && < 5,
