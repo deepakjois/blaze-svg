@@ -299,6 +299,20 @@ svg11 = SvgVariant
         , "xChannelSelector", "xlink:actuate", "xlink:arcrole", "xlink:href"
         , "xlink:role", "xlink:show", "xlink:title", "xlink:type", "xml:base"
         , "xml:lang", "xml:space", "y", "y1", "y2", "yChannelSelector", "z", "zoomAndPan"
+        -- Presentation Attributes
+        , "alignment-baseline", "baseline-shift", "clip-path", "clip-rule"
+        , "clip", "color-interpolation-filters", "color-interpolation"
+        , "color-profile", "color-rendering", "color", "cursor", "direction"
+        , "display", "dominant-baseline", "enable-background", "fill-opacity"
+        , "fill-rule", "filter", "flood-color", "flood-opacity"
+        , "font-size-adjust", "glyph-orientation-horizontal"
+        , "glyph-orientation-vertical", "image-rendering", "kerning", "letter-spacing"
+        , "lighting-color", "marker-end", "marker-mid", "marker-start", "mask"
+        , "opacity", "overflow", "pointer-events", "shape-rendering", "stop-color"
+        , "stop-opacity", "stroke-dasharray", "stroke-dashoffset", "stroke-linecap"
+        , "stroke-linejoin", "stroke-miterlimit", "stroke-opacity", "stroke-width"
+        , "stroke", "text-anchor", "text-decoration", "text-rendering", "unicode-bidi"
+        , "visibility", "word-spacing", "writing-mode"
         ]
     , selfClosing = True
     }
