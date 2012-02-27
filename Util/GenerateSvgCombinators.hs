@@ -71,6 +71,7 @@ writeSvgVariant svgVariant = do
         , "-- | This module exports SVG combinators used to create documents."
         , "--"
         , exportList modulName $ "module Text.Blaze"
+                                : "module Text.Blaze.Svg"
                                 : "docType"
                                 : "docTypeSvg"
                                 : map (sanitize . fst) sortedTags
@@ -78,8 +79,8 @@ writeSvgVariant svgVariant = do
         , "import Prelude ((>>), (.))"
         , ""
         , "import Text.Blaze"
+        , "import Text.Blaze.Svg"
         , "import Text.Blaze.Internal"
-        , "import Text.Blaze.Svg.Internal"
         , ""
         , makeDocType $ docType svgVariant
         , makeDocTypeSvg $ docType svgVariant
