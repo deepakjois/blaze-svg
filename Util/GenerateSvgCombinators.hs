@@ -76,7 +76,7 @@ writeSvgVariant svgVariant = do
                                 : "docTypeSvg"
                                 : map (sanitize . fst) sortedTags
         , DO_NOT_EDIT
-        , "import Prelude ((>>), (.))"
+        , "import Prelude ((>>), (.), ($))"
         , ""
         , "import Text.Blaze"
         , "import Text.Blaze.Svg"
@@ -177,7 +177,7 @@ makeDocTypeSvg lines' = unlines
     , "--"
     , "docTypeSvg :: Svg  -- ^ Inner SVG."
     , "            -> Svg  -- ^ Resulting SVG."
-    , "docTypeSvg inner = docType >> svg inner"
+    , "docTypeSvg inner = docType >> (svg ! attribute \"xmlns\" \" xmlns=\\\"\" \"http://www.w3.org/2000/svg\" ! attribute \"xmlns:xlink\" \" xmlns:xlink=\\\"\" \"http://www.w3.org/1999/xlink\"  $ inner)"
     , "{-# INLINE docTypeSvg #-}"
     ]
 
@@ -238,7 +238,8 @@ svg11 :: SvgVariant
 svg11 = SvgVariant
     { version = ["Svg11"]
     , docType =
-        [ "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\""
+        [ "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+        , "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\""
         , "    \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">"
         ]
     , parents =
