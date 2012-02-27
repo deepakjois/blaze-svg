@@ -19,8 +19,8 @@ Library
   Ghc-Options:       -Wall
 
   Exposed-modules:
-    Text.Blaze.Svg
-    Text.Blaze.Svg.Attributes
+    Text.Blaze.Svg11
+    Text.Blaze.Svg11.Attributes
     Text.Blaze.Svg.Internal
 
   Build-depends:

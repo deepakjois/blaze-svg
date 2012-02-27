@@ -19,19 +19,21 @@ import qualified Data.Set as S
 -- > sanitize "http-equiv" == "httpEquiv"
 --
 sanitize :: String -> String
-sanitize = appendUnderscore . removeDash . map toLower
+sanitize = appendUnderscore . removeDashOrColon . map toLower
   where
     -- Remove a dash, replacing it by camelcase notation
     --
     -- Example:
     --
-    -- > removeDash "foo-bar" == "fooBar"
+    -- > removeDashOrColon "foo-bar" == "fooBar"
     --
-    removeDash ('-' : x : xs) = toUpper x : removeDash xs
-    removeDash (x : xs) = x : removeDash xs
-    removeDash [] = []
+    removeDashOrColon ('-' : x : xs) = toUpper x : removeDashOrColon xs
+    removeDashOrColon (':' : x : xs) = toUpper x : removeDashOrColon xs
+    removeDashOrColon (x : xs) = x : removeDashOrColon xs
+    removeDashOrColon [] = []
 
     appendUnderscore t | t `S.member` keywords = t ++ "_"
+                       | t `S.member` prelude  = t ++ "_"
                        | otherwise             = t
 
 -- | A set of standard Haskell keywords, which cannot be used as combinators.
@@ -70,7 +72,7 @@ prelude = S.fromList
     , "shows", "showsPrec", "significand", "signum", "sin", "sinh", "snd"
     , "span", "splitAt", "sqrt", "subtract", "succ", "sum", "tail", "take"
     , "takeWhile", "tan", "tanh", "toEnum", "toInteger", "toRational"
-    , "truncate", "uncurry", "undefined", "unlines", "until", "unwords", "unzip"
+    , "truncate", "text", "uncurry", "undefined", "unlines", "until", "unwords", "unzip"
     , "unzip3", "userError", "words", "writeFile", "zip", "zip3", "zipWith"
     , "zipWith3"
     ]

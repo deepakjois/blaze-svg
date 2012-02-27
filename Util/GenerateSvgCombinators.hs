@@ -2,9 +2,9 @@
 
 #define DO_NOT_EDIT (doNotEdit __FILE__ __LINE__)
 
--- | Generates code for HTML tags.
+-- | Generates code for SVG tags.
 --
-module Util.GenerateHtmlCombinators where
+module Util.GenerateSvgCombinators where
 
 import Control.Arrow ((&&&))
 import Data.List (sort, sortBy, intersperse, intercalate)
@@ -18,9 +18,9 @@ import qualified Data.Set as S
 
 import Util.Sanitize (sanitize, prelude)
 
--- | Datatype for an HTML variant.
+-- | Datatype for an SVG variant.
 --
-data HtmlVariant = HtmlVariant
+data SvgVariant = SvgVariant
     { version     :: [String]
     , docType     :: [String]
     , parents     :: [String]
@@ -29,22 +29,22 @@ data HtmlVariant = HtmlVariant
     , selfClosing :: Bool
     } deriving (Eq)
 
-instance Show HtmlVariant where
+instance Show SvgVariant where
     show = map toLower . intercalate "-" . version
 
--- | Get the full module name for an HTML variant.
+-- | Get the full module name for an SVG variant.
 --
-getModuleName :: HtmlVariant -> String
+getModuleName :: SvgVariant -> String
 getModuleName = ("Text.Blaze." ++) . intercalate "." . version
 
--- | Get the attribute module name for an HTML variant.
+-- | Get the attribute module name for an SVG variant.
 --
-getAttributeModuleName :: HtmlVariant -> String
+getAttributeModuleName :: SvgVariant -> String
 getAttributeModuleName = (++ ".Attributes") . getModuleName
 
 -- | Check if a given name causes a name clash.
 --
-isNameClash :: HtmlVariant -> String -> Bool
+isNameClash :: SvgVariant -> String -> Bool
 isNameClash v t
     -- Both an element and an attribute
     | (t `elem` parents v || t `elem` leafs v) && t `elem` attributes v = True
@@ -52,15 +52,15 @@ isNameClash v t
     | sanitize t `S.member` prelude = True
     | otherwise = False
 
--- | Write an HTML variant.
+-- | Write an SVG variant.
 --
-writeHtmlVariant :: HtmlVariant -> IO ()
-writeHtmlVariant htmlVariant = do
+writeSvgVariant :: SvgVariant -> IO ()
+writeSvgVariant svgVariant = do
     -- Make a directory.
     createDirectoryIfMissing True basePath
 
     let tags =  zip parents' (repeat makeParent)
-             ++ zip leafs' (repeat (makeLeaf $ selfClosing htmlVariant))
+             ++ zip leafs' (repeat (makeLeaf $ selfClosing svgVariant))
         sortedTags = sortBy (comparing fst) tags
         appliedTags = map (\(x, f) -> f x) sortedTags
 
@@ -68,20 +68,21 @@ writeHtmlVariant htmlVariant = do
     writeFile' (basePath <.> "hs") $ removeTrailingNewlines $ unlines
         [ DO_NOT_EDIT
         , "{-# LANGUAGE OverloadedStrings #-}"
-        , "-- | This module exports HTML combinators used to create documents."
+        , "-- | This module exports SVG combinators used to create documents."
         , "--"
         , exportList modulName $ "module Text.Blaze"
                                 : "docType"
-                                : "docTypeHtml"
+                                : "docTypeSvg"
                                 : map (sanitize . fst) sortedTags
         , DO_NOT_EDIT
         , "import Prelude ((>>), (.))"
         , ""
         , "import Text.Blaze"
         , "import Text.Blaze.Internal"
+        , "import Text.Blaze.Svg.Internal"
         , ""
-        , makeDocType $ docType htmlVariant
-        , makeDocTypeHtml $ docType htmlVariant
+        , makeDocType $ docType svgVariant
+        , makeDocTypeSvg $ docType svgVariant
         , unlines appliedTags
         ]
 
@@ -91,7 +92,7 @@ writeHtmlVariant htmlVariant = do
     writeFile' (basePath </> "Attributes.hs") $ removeTrailingNewlines $ unlines
         [ DO_NOT_EDIT
         , "-- | This module exports combinators that provide you with the"
-        , "-- ability to set attributes on HTML elements."
+        , "-- ability to set attributes on SVG elements."
         , "--"
         , "{-# LANGUAGE OverloadedStrings #-}"
         , exportList attributeModuleName $ map sanitize sortedAttributes
@@ -104,12 +105,12 @@ writeHtmlVariant htmlVariant = do
         ]
   where
     basePath = "Text" </> "Blaze" </> foldl1 (</>) version'
-    modulName = getModuleName htmlVariant
-    attributeModuleName = getAttributeModuleName htmlVariant
-    attributes' = attributes htmlVariant
-    parents'    = parents htmlVariant
-    leafs'      = leafs htmlVariant
-    version'    = version htmlVariant
+    modulName = getModuleName svgVariant
+    attributeModuleName = getAttributeModuleName svgVariant
+    attributes' = attributes svgVariant
+    parents'    = parents svgVariant
+    leafs'      = leafs svgVariant
+    version'    = version svgVariant
     removeTrailingNewlines = reverse . drop 2 . reverse
     writeFile' file content = do
         putStrLn ("Generating " ++ file)
@@ -154,60 +155,40 @@ makeDocType :: [String] -> String
 makeDocType lines' = unlines
     [ DO_NOT_EDIT
     , "-- | Combinator for the document type. This should be placed at the top"
-    , "-- of every HTML page."
-    , "--"
-    , "-- Example:"
-    , "--"
-    , "-- > docType"
-    , "--"
-    , "-- Result:"
+    , "-- of every SVG page."
     , "--"
     , unlines (map ("-- > " ++) lines') ++ "--"
-    , "docType :: Html  -- ^ The document type HTML."
+    , "docType :: Svg  -- ^ The document type SVG."
     , "docType = preEscapedText " ++ show (unlines lines')
     , "{-# INLINE docType #-}"
     ]
 
--- | Generate a function for the HTML tag (including the doctype).
+-- | Generate a function for the SVG tag (including the doctype).
 --
-makeDocTypeHtml :: [String]  -- ^ The doctype.
+makeDocTypeSvg :: [String]  -- ^ The doctype.
                 -> String    -- ^ Resulting combinator function.
-makeDocTypeHtml lines' = unlines
+makeDocTypeSvg lines' = unlines
     [ DO_NOT_EDIT
-    , "-- | Combinator for the @\\<html>@ element. This combinator will also"
+    , "-- | Combinator for the @\\<svg>@ element. This combinator will also"
     , "-- insert the correct doctype."
     , "--"
-    , "-- Example:"
+    , unlines (map ("-- > " ++) lines') ++ "-- > <svg><span>foo</span></svg>"
     , "--"
-    , "-- > docTypeHtml $ span $ text \"foo\""
-    , "--"
-    , "-- Result:"
-    , "--"
-    , unlines (map ("-- > " ++) lines') ++ "-- > <html><span>foo</span></html>"
-    , "--"
-    , "docTypeHtml :: Html  -- ^ Inner HTML."
-    , "            -> Html  -- ^ Resulting HTML."
-    , "docTypeHtml inner = docType >> html inner"
-    , "{-# INLINE docTypeHtml #-}"
+    , "docTypeSvg :: Svg  -- ^ Inner SVG."
+    , "            -> Svg  -- ^ Resulting SVG."
+    , "docTypeSvg inner = docType >> svg inner"
+    , "{-# INLINE docTypeSvg #-}"
     ]
 
--- | Generate a function for an HTML tag that can be a parent.
+-- | Generate a function for an SVG tag that can be a parent.
 --
 makeParent :: String -> String
 makeParent tag = unlines
     [ DO_NOT_EDIT
     , "-- | Combinator for the @\\<" ++ tag ++ ">@ element."
     , "--"
-    , "-- Example:"
-    , "--"
-    , "-- > " ++ function ++ " $ span $ text \"foo\""
-    , "--"
-    , "-- Result:"
-    , "--"
-    , "-- > <" ++ tag ++ "><span>foo</span></" ++ tag ++ ">"
-    , "--"
-    , function        ++ " :: Html  -- ^ Inner HTML."
-    , spaces function ++ " -> Html  -- ^ Resulting HTML."
+    , function        ++ " :: Svg  -- ^ Inner SVG."
+    , spaces function ++ " -> Svg  -- ^ Resulting SVG."
     , function        ++ " = Parent \"" ++ tag ++ "\" \"<" ++ tag
                       ++ "\" \"</" ++ tag ++ ">\"" ++ modifier
     , "{-# INLINE " ++ function ++ " #-}"
@@ -216,7 +197,7 @@ makeParent tag = unlines
     function = sanitize tag
     modifier = if tag `elem` ["style", "script"] then " . external" else ""
 
--- | Generate a function for an HTML tag that must be a leaf.
+-- | Generate a function for an SVG tag that must be a leaf.
 --
 makeLeaf :: Bool    -- ^ Make leaf tags self-closing
          -> String  -- ^ Tag for the combinator
@@ -225,15 +206,7 @@ makeLeaf closing tag = unlines
     [ DO_NOT_EDIT
     , "-- | Combinator for the @\\<" ++ tag ++ " />@ element."
     , "--"
-    , "-- Example:"
-    , "--"
-    , "-- > " ++ function
-    , "--"
-    , "-- Result:"
-    , "--"
-    , "-- > <" ++ tag ++ " />"
-    , "--"
-    , function ++ " :: Html  -- ^ Resulting HTML."
+    , function ++ " :: Svg  -- ^ Resulting SVG."
     , function ++ " = Leaf \"" ++ tag ++ "\" \"<" ++ tag ++ "\" " ++ "\""
                ++ (if closing then " /" else "") ++ ">\""
     , "{-# INLINE " ++ function ++ " #-}"
@@ -241,20 +214,12 @@ makeLeaf closing tag = unlines
   where
     function = sanitize tag
 
--- | Generate a function for an HTML attribute.
+-- | Generate a function for an SVG attribute.
 --
 makeAttribute :: String -> String
 makeAttribute name = unlines
     [ DO_NOT_EDIT
     , "-- | Combinator for the @" ++ name ++ "@ attribute."
-    , "--"
-    , "-- Example:"
-    , "--"
-    , "-- > div ! " ++ function ++ " \"bar\" $ \"Hello.\""
-    , "--"
-    , "-- Result:"
-    , "--"
-    , "-- > <div " ++ name ++ "=\"bar\">Hello.</div>"
     , "--"
     , function        ++ " :: AttributeValue  -- ^ Attribute value."
     , spaces function ++ " -> Attribute       -- ^ Resulting attribute."
@@ -265,205 +230,84 @@ makeAttribute name = unlines
   where
     function = sanitize name
 
--- | HTML 4.01 Strict.
--- A good reference can be found here: http://www.w3schools.com/tags/default.asp
+-- | SVG 1.1
+-- Reference: https://developer.mozilla.org/en/SVG
 --
-html4Strict :: HtmlVariant
-html4Strict = HtmlVariant
-    { version = ["Html4", "Strict"]
+svg11 :: SvgVariant
+svg11 = SvgVariant
+    { version = ["Svg11"]
     , docType =
-        [ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\""
-        , "    \"http://www.w3.org/TR/html4/strict.dtd\">"
+        [ "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\""
+        , "    \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">"
         ]
     , parents =
-        [ "a", "abbr", "acronym", "address", "b", "bdo", "big", "blockquote"
-        , "body" , "button", "caption", "cite", "code", "colgroup", "dd", "del"
-        , "dfn", "div" , "dl", "dt", "em", "fieldset", "form", "h1", "h2", "h3"
-        , "h4", "h5", "h6", "head", "html", "i", "ins" , "kbd", "label"
-        , "legend", "li", "map", "noscript", "object", "ol", "optgroup"
-        , "option", "p", "pre", "q", "samp", "script", "select", "small"
-        , "span", "strong", "style", "sub", "sup", "table", "tbody", "td"
-        , "textarea", "tfoot", "th", "thead", "title", "tr", "tt", "ul", "var"
+        [ "a","defs","glyph","g","marker","mask","missing-glyph","pattern", "svg"
+        , "switch", "symbol"
         ]
     , leafs =
-        [ "area", "br", "col", "hr", "link", "img", "input",  "meta", "param"
+        [ "altGlyph", "altGlyphDef", "altGlyphItem", "animate", "animateColor"
+        , "animateMotion", "animateTransform", "circle", "clipPath"
+        , "color-profile" , "cursor", "desc", "ellipse", "feBlend"
+        , "feColorMatrix", "feComponentTransfer" , "feComposite"
+        , "feConvolveMatrix", "feDiffuseLighting", "feDisplacementMap"
+        , "feDistantLight", "feFlood", "feFuncA", "feFuncB" , "feFuncG"
+        , "feFuncR", "feGaussianBlur", "feImage", "feMerge", "feMergeNode"
+        , "feMorphology", "feOffset", "fePointLight", "feSpecularLighting"
+        , "feSpotLight" , "feTile", "feTurbulence", "filter", "font"
+        , "font-face", "font-face-format" , "font-face-name", "font-face-src"
+        , "font-face-uri", "foreignObject" , "glyphRef", "hkern", "image"
+        , "line", "linearGradient" , "metadata", "mpath", "path"
+        , "polygon" , "polyline", "radialGradient", "rect", "script", "set"
+        , "stop", "style" , "text", "textPath", "title", "tref", "tspan", "use"
+        , "view", "vkern"
         ]
     , attributes =
-        [ "abbr", "accept", "accesskey", "action", "align", "alt", "archive"
-        , "axis", "border", "cellpadding", "cellspacing", "char", "charoff"
-        , "charset", "checked", "cite", "class", "classid", "codebase"
-        , "codetype", "cols", "colspan", "content", "coords", "data", "datetime"
-        , "declare", "defer", "dir", "disabled", "enctype", "for", "frame"
-        , "headers", "height", "href", "hreflang", "http-equiv", "id", "label"
-        , "lang", "maxlength", "media", "method", "multiple", "name", "nohref"
-        , "onabort", "onblur", "onchange", "onclick", "ondblclick", "onfocus"
-        , "onkeydown", "onkeypress", "onkeyup", "onload", "onmousedown"
-        , "onmousemove", "onmouseout", "onmouseover", "onmouseup", "onreset"
-        , "onselect", "onsubmit", "onunload", "profile", "readonly", "rel"
-        , "rev", "rows", "rowspan", "rules", "scheme", "scope", "selected"
-        , "shape", "size", "span", "src", "standby", "style", "summary"
-        , "tabindex", "title", "type", "usemap", "valign", "value", "valuetype"
-        , "width"
+        [ "accent-height", "accumulate", "additive", "alphabetic", "amplitude"
+        , "arabic-form", "ascent", "attributeName", "attributeType", "azimuth"
+        , "baseFrequency", "baseProfile", "bbox", "begin", "bias", "by", "calcMode"
+        , "cap-height", "class", "clipPathUnits", "contentScriptType"
+        , "contentStyleType", "cx", "cy", "d", "descent", "diffuseConstant", "divisor"
+        , "dur", "dx", "dy", "edgeMode", "elevation", "end", "exponent"
+        , "externalResourcesRequired", "fill", "filterRes", "filterUnits", "font-family"
+        , "font-size", "font-stretch", "font-style", "font-variant", "font-weight"
+        , "format", "from", "fx", "fy", "g1", "g2", "glyph-name", "glyphRef"
+        , "gradientTransform", "gradientUnits", "hanging", "height", "horiz-adv-x"
+        , "horiz-origin-x", "horiz-origin-y", "id", "ideographic", "in", "in2"
+        , "intercept", "k", "k1", "k2", "k3", "k4", "kernelMatrix", "kernelUnitLength"
+        , "keyPoints", "keySplines", "keyTimes", "lang", "lengthAdjust"
+        , "limitingConeAngle", "local", "markerHeight", "markerUnits", "markerWidth"
+        , "maskContentUnits", "maskUnits", "mathematical", "max", "media", "method"
+        , "min", "mode", "name", "numOctaves", "offset", "onabort", "onactivate"
+        , "onbegin", "onclick", "onend", "onerror", "onfocusin", "onfocusout", "onload"
+        , "onmousedown", "onmousemove", "onmouseout", "onmouseover", "onmouseup"
+        , "onrepeat", "onresize", "onscroll", "onunload", "onzoom", "operator", "order"
+        , "orient", "orientation", "origin", "overline-position", "overline-thickness"
+        , "panose-1", "path", "pathLength", "patternContentUnits", "patternTransform"
+        , "patternUnits", "points", "pointsAtX", "pointsAtY", "pointsAtZ"
+        , "preserveAlpha", "preserveAspectRatio", "primitiveUnits", "r", "radius"
+        , "refX", "refY", "rendering-intent", "repeatCount", "repeatDur"
+        , "requiredExtensions", "requiredFeatures", "restart", "result", "rotate", "rx"
+        , "ry", "scale", "seed", "slope", "spacing", "specularConstant"
+        , "specularExponent", "spreadMethod", "startOffset", "stdDeviation", "stemh"
+        , "stemv", "stitchTiles", "strikethrough-position", "strikethrough-thickness"
+        , "string", "style", "surfaceScale", "systemLanguage", "tableValues", "target"
+        , "targetX", "targetY", "textLength", "title", "to", "transform", "type", "u1"
+        , "u2", "underline-position", "underline-thickness", "unicode", "unicode-range"
+        , "units-per-em", "v-alphabetic", "v-hanging", "v-ideographic", "v-mathematical"
+        , "values", "version", "vert-adv-y", "vert-origin-x", "vert-origin-y", "viewBox"
+        , "viewTarget", "width", "widths", "x", "x-height", "x1", "x2"
+        , "xChannelSelector", "xlink:actuate", "xlink:arcrole", "xlink:href"
+        , "xlink:role", "xlink:show", "xlink:title", "xlink:type", "xml:base"
+        , "xml:lang", "xml:space", "y", "y1", "y2", "yChannelSelector", "z", "zoomAndPan"
         ]
-    , selfClosing = False
-    }
-
--- | HTML 4.0 Transitional
---
-html4Transitional :: HtmlVariant
-html4Transitional = HtmlVariant
-    { version = ["Html4", "Transitional"]
-    , docType =
-        [ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\""
-        , "    \"http://www.w3.org/TR/html4/loose.dtd\">"
-        ]
-    , parents = parents html4Strict ++
-        [ "applet", "center", "dir", "font", "iframe", "isindex", "menu"
-        , "noframes", "s", "u"
-        ]
-    , leafs = leafs html4Strict ++ ["basefont"]
-    , attributes = attributes html4Strict ++
-        [ "background", "bgcolor", "clear", "compact", "hspace", "language"
-        , "noshade", "nowrap", "start", "target", "vspace"
-        ]
-    , selfClosing = False
-    }
-
--- | HTML 4.0 FrameSet
---
-html4FrameSet :: HtmlVariant
-html4FrameSet = HtmlVariant
-    { version = ["Html4", "FrameSet"]
-    , docType =
-        [ "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 FrameSet//EN\""
-        , "    \"http://www.w3.org/TR/html4/frameset.dtd\">"
-        ]
-    , parents = parents html4Transitional ++ ["frameset"]
-    , leafs = leafs html4Transitional ++ ["frame"]
-    , attributes = attributes html4Transitional ++
-        [ "frameborder", "scrolling"
-        ]
-    , selfClosing = False
-    }
-
--- | XHTML 1.0 Strict
---
-xhtml1Strict :: HtmlVariant
-xhtml1Strict = HtmlVariant
-    { version = ["XHtml1", "Strict"]
-    , docType =
-        [ "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\""
-        , "    \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">"
-        ]
-    , parents = parents html4Strict
-    , leafs = leafs html4Strict
-    , attributes = attributes html4Strict
     , selfClosing = True
     }
 
--- | XHTML 1.0 Transitional
+-- | A map of SVG variants, per version, lowercase.
 --
-xhtml1Transitional :: HtmlVariant
-xhtml1Transitional = HtmlVariant
-    { version = ["XHtml1", "Transitional"]
-    , docType =
-        [ "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\""
-        , "    \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">"
-        ]
-    , parents = parents html4Transitional
-    , leafs = leafs html4Transitional
-    , attributes = attributes html4Transitional
-    , selfClosing = True
-    }
-
--- | XHTML 1.0 FrameSet
---
-xhtml1FrameSet :: HtmlVariant
-xhtml1FrameSet = HtmlVariant
-    { version = ["XHtml1", "FrameSet"]
-    , docType =
-        [ "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 FrameSet//EN\""
-        , "    \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd\">"
-        ]
-    , parents = parents html4FrameSet
-    , leafs = leafs html4FrameSet
-    , attributes = attributes html4FrameSet
-    , selfClosing = True
-    }
-
--- | HTML 5.0
--- A good reference can be found here:
--- http://www.w3schools.com/html5/html5_reference.asp
---
-html5 :: HtmlVariant
-html5 = HtmlVariant
-    { version = ["Html5"]
-    , docType = ["<!DOCTYPE HTML>"]
-    , parents =
-        [ "a", "abbr", "address", "article", "aside", "audio", "b", "base"
-        , "bdo", "blockquote", "body", "button", "canvas", "caption", "cite"
-        , "code", "colgroup", "command", "datalist", "dd", "del", "details"
-        , "dfn", "div", "dl", "dt", "em", "fieldset", "figcaption", "figure"
-        , "footer", "form", "h1", "h2", "h3", "h4", "h5", "h6", "head", "header"
-        , "hgroup", "html", "i", "iframe", "ins", "keygen", "kbd", "label"
-        , "legend", "li", "map", "mark", "menu", "meter", "nav", "noscript"
-        , "object", "ol", "optgroup", "option", "output", "p", "pre", "progress"
-        , "q", "rp", "rt", "ruby", "samp", "script", "section", "select"
-        , "small", "source", "span", "strong", "style", "sub", "summary", "sup"
-        , "table", "tbody", "td", "textarea", "tfoot", "th", "thead", "time"
-        , "title", "tr", "ul", "var", "video"
-        ]
-    , leafs =
-        [ "area", "br", "col", "embed", "hr", "img", "input", "meta", "link"
-        , "param"
-        ]
-    , attributes =
-        [ "accept", "accept-charset", "accesskey", "action", "alt", "async"
-        , "autocomplete", "autofocus", "autoplay", "challenge", "charset"
-        , "checked", "cite", "class", "cols", "colspan", "content"
-        , "contenteditable", "contextmenu", "controls", "coords", "data"
-        , "datetime", "defer", "dir", "disabled", "draggable", "enctype", "for"
-        , "form", "formaction", "formenctype", "formmethod", "formnovalidate"
-        , "formtarget", "headers", "height", "hidden", "high", "href"
-        , "hreflang", "http-equiv", "icon", "id", "ismap", "item", "itemprop"
-        , "keytype", "label", "lang", "list", "loop", "low", "manifest", "max"
-        , "maxlength", "media", "method", "min", "multiple", "name"
-        , "novalidate", "onbeforeonload", "onbeforeprint", "onblur", "oncanplay"
-        , "oncanplaythrough", "onchange", "oncontextmenu", "onclick"
-        , "ondblclick", "ondrag", "ondragend", "ondragenter", "ondragleave"
-        , "ondragover", "ondragstart", "ondrop", "ondurationchange", "onemptied"
-        , "onended", "onerror", "onfocus", "onformchange", "onforminput"
-        , "onhaschange", "oninput", "oninvalid", "onkeydown", "onkeyup"
-        , "onload", "onloadeddata", "onloadedmetadata", "onloadstart"
-        , "onmessage", "onmousedown", "onmousemove", "onmouseout", "onmouseover"
-        , "onmouseup", "onmousewheel", "ononline", "onpagehide", "onpageshow"
-        , "onpause", "onplay", "onplaying", "onprogress", "onpropstate"
-        , "onratechange", "onreadystatechange", "onredo", "onresize", "onscroll"
-        , "onseeked", "onseeking", "onselect", "onstalled", "onstorage"
-        , "onsubmit", "onsuspend", "ontimeupdate", "onundo", "onunload"
-        , "onvolumechange", "onwaiting", "open", "optimum", "pattern", "ping"
-        , "placeholder", "preload", "pubdate", "radiogroup", "readonly", "rel"
-        , "required", "reversed", "rows", "rowspan", "sandbox", "scope"
-        , "scoped", "seamless", "selected", "shape", "size", "sizes", "span"
-        , "spellcheck", "src", "srcdoc", "start", "step", "style", "subject"
-        , "summary", "tabindex", "target", "title", "type", "usemap", "value"
-        , "width", "wrap", "xmlns"
-        ]
-    , selfClosing = False
-    }
-
--- | A map of HTML variants, per version, lowercase.
---
-htmlVariants :: Map String HtmlVariant
-htmlVariants = M.fromList $ map (show &&& id)
-    [ html4Strict
-    , html4Transitional
-    , html4FrameSet
-    , xhtml1Strict
-    , xhtml1Transitional
-    , xhtml1FrameSet
-    , html5
-    ]
+svgVariants :: Map String SvgVariant
+svgVariants = M.fromList $ map (show &&& id)
+    [ svg11 ]
 
 main :: IO ()
-main = mapM_ (writeHtmlVariant . snd) $ M.toList htmlVariants
+main = mapM_ (writeSvgVariant . snd) $ M.toList svgVariants
