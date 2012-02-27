@@ -1,4 +1,4 @@
-blaze-svg is SVG combinator library, derived from [blaze-html]
+blaze-svg is a SVG combinator library, derived from [blaze-html]
 
 [blaze-html]: http://jaspervdj.be/blaze/
 
