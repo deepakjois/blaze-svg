@@ -1,11 +1,13 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Text.Blaze.Svg
     (
+    -- * Types
       Svg
+    -- * Creating paths
     , mkPath
-    -- | lineTo
+    -- ** lineTo
     , l, lr
-    -- | moveTo
+    -- ** moveTo
     , m, mr
     ) where
 
