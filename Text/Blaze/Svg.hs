@@ -1,14 +1,13 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Text.Blaze.Svg
     (
-    -- * Types
       Svg
-    -- * Creating paths
     , mkPath
-    -- ** lineTo
-    , l, lr
-    -- ** moveTo
     , m, mr
+    , z
+    , l, lr, h, hr, v, vr
+    , c, cr, s, sr
+    , q, qr, t, tr
     ) where
 
 import Text.Blaze.Svg.Internal
