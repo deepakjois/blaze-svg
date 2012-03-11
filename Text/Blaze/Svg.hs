@@ -2,6 +2,7 @@
 module Text.Blaze.Svg
     (
       Svg
+    , Path
     , mkPath
     , m, mr
     , z

@@ -7,6 +7,7 @@ import Text.Blaze
 import Text.Blaze.Internal
 
 type Svg = HtmlM ()
+type Path = State AttributeValue ()
 
 -- | Construct SVG path values using path instruction combinators.
 -- See simple example below of how you can use @mkPath@ to
@@ -25,14 +26,14 @@ type Svg = HtmlM ()
 -- > makeSimplePath =  mkPath do
 -- >   l 2 3
 -- >   m 4 5
-mkPath :: State AttributeValue () -> AttributeValue
+mkPath :: Path -> AttributeValue
 mkPath path = snd $ runState path mempty
 
-appendToPath :: [String] -> State AttributeValue ()
+appendToPath :: [String] -> Path
 appendToPath  = modify . flip mappend . toValue . join
 
 -- Moveto
-m :: Show a => a -> a -> State AttributeValue ()
+m :: Show a => a -> a -> Path
 m x y = appendToPath
   [ "M "
   , show x, ",", show y
@@ -40,7 +41,7 @@ m x y = appendToPath
   ]
 
 -- Moveto (relative)
-mr :: Show a => a -> a -> State AttributeValue ()
+mr :: Show a => a -> a -> Path
 mr dx dy = appendToPath
   [ "m "
   , show dx, ",", show dy
@@ -48,11 +49,11 @@ mr dx dy = appendToPath
   ]
 
 -- ClosePath
-z :: State AttributeValue ()
+z :: Path
 z = modify (`mappend` toValue "Z")
 
 -- Lineto
-l :: Show a => a -> a -> State AttributeValue ()
+l :: Show a => a -> a -> Path
 l x y = appendToPath
   [ "L "
   , show x, ",", show y
@@ -60,7 +61,7 @@ l x y = appendToPath
   ]
 
 -- Lineto (relative)
-lr :: Show a => a -> a -> State AttributeValue ()
+lr :: Show a => a -> a -> Path
 lr dx dy = appendToPath
   [ "l "
   , show dx, ",", show dy
@@ -68,7 +69,7 @@ lr dx dy = appendToPath
   ]
 
 -- Horizontal lineto
-h :: Show a => a -> State AttributeValue ()
+h :: Show a => a -> Path
 h x = appendToPath
   [ "H "
   , show x
@@ -76,7 +77,7 @@ h x = appendToPath
   ]
 
 -- Horizontal lineto (relative)
-hr :: Show a => a -> State AttributeValue ()
+hr :: Show a => a -> Path
 hr dx = appendToPath
   [ "h "
   , show dx
@@ -85,7 +86,7 @@ hr dx = appendToPath
 
 
 -- Vertical lineto
-v :: Show a => a -> State AttributeValue ()
+v :: Show a => a -> Path
 v y = appendToPath
   [ "V "
   , show y
@@ -93,7 +94,7 @@ v y = appendToPath
   ]
 
 -- Vertical lineto (relative)
-vr :: Show a => a -> State AttributeValue ()
+vr :: Show a => a -> Path
 vr dy = appendToPath
   [ "v "
   , show dy
@@ -101,7 +102,7 @@ vr dy = appendToPath
   ]
 
 -- Cubic Bezier curve
-c :: Show a => a -> a -> a -> a -> a -> a -> State AttributeValue ()
+c :: Show a => a -> a -> a -> a -> a -> a -> Path
 c c1x c1y c2x c2y x y = appendToPath
   [ "C "
   , show c1x, ",", show c1y
@@ -112,7 +113,7 @@ c c1x c1y c2x c2y x y = appendToPath
   ]
 
 -- Cubic Bezier curve (relative)
-cr :: Show a => a -> a -> a -> a -> a -> a -> State AttributeValue ()
+cr :: Show a => a -> a -> a -> a -> a -> a -> Path
 cr dc1x dc1y dc2x dc2y dx dy = appendToPath
   [ "c "
   , show dc1x, ",", show dc1y
@@ -123,7 +124,7 @@ cr dc1x dc1y dc2x dc2y dx dy = appendToPath
   ]
 
 -- Smooth Cubic Bezier curve
-s :: Show a => a -> a -> a -> a -> State AttributeValue ()
+s :: Show a => a -> a -> a -> a -> Path
 s c2x c2y x y = appendToPath
   [ "S "
   , show c2x, ",", show c2y
@@ -133,7 +134,7 @@ s c2x c2y x y = appendToPath
   ]
 
 -- Smooth Cubic Bezier curve (relative)
-sr :: Show a => a -> a -> a -> a -> State AttributeValue ()
+sr :: Show a => a -> a -> a -> a -> Path
 sr dc2x dc2y dx dy = appendToPath
   [ "s "
   , show dc2x, ",", show dc2y
@@ -143,7 +144,7 @@ sr dc2x dc2y dx dy = appendToPath
   ]
 
 -- Quadratic Bezier curve
-q :: Show a => a -> a -> a -> a -> State AttributeValue ()
+q :: Show a => a -> a -> a -> a -> Path
 q cx cy x y = appendToPath
   [ "Q "
   , show cx, ",", show cy
@@ -153,7 +154,7 @@ q cx cy x y = appendToPath
   ]
 
 -- Quadratic Bezier curve (relative)
-qr :: Show a => a -> a -> a -> a  -> State AttributeValue ()
+qr :: Show a => a -> a -> a -> a  -> Path
 qr dcx dcy dx dy = appendToPath
   [ "q "
   , show dcx, ",", show dcy
@@ -163,7 +164,7 @@ qr dcx dcy dx dy = appendToPath
   ]
 
 -- Smooth Quadratic Bezier curve
-t  :: Show a => a -> a -> State AttributeValue ()
+t  :: Show a => a -> a -> Path
 t x y = appendToPath
   [ "T "
   , " "
@@ -172,7 +173,7 @@ t x y = appendToPath
   ]
 
 -- Smooth Quadratic Bezier curve (relative)
-tr :: Show a => a -> a -> State AttributeValue ()
+tr :: Show a => a -> a -> Path
 tr x y = appendToPath
   [ "t "
   , " "
