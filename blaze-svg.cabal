@@ -1,7 +1,7 @@
 name:                blaze-svg
 version:             0.1.0.0
 synopsis:            SVG combinator library
--- description:
+description:         SVG combinator library
 homepage:            https://github.com/deepakjois/blaze-svg
 license:             BSD3
 license-file:        LICENSE
