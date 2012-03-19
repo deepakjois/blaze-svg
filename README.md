@@ -1,3 +1,5 @@
+[![Build Status](https://secure.travis-ci.org/deepakjois/blaze-svg.png)](http://travis-ci.org/deepakjois/blaze-svg)
+
 blaze-svg is a SVG combinator library, derived from [blaze-html]
 
 [blaze-html]: http://jaspervdj.be/blaze/
