@@ -186,4 +186,64 @@ tr x y = appendToPath
   , " "
   ]
 
+-- | Specifies a translation by @x@ and @y@
+translate :: Show a => a -> a -> AttributeValue
+translate x y = toValue . join $
+  [ "translate("
+  , show x, " ", show y
+  , ")"
+  ]
 
+-- | Specifies a scale operation by @x@ and @y@
+scale :: Show a => a -> a -> AttributeValue
+scale x y = toValue . join $
+  [ "scale("
+  , show x, " ", show y
+  , ")"
+  ]
+
+-- | Specifies a rotation by @rotate-angle@ degrees
+rotate :: Show a => a -> AttributeValue
+rotate rotateAngle = toValue . join $
+  [ "rotate("
+  , show rotateAngle
+  , ")"
+  ]
+
+-- | Specifies a rotation by @rotate-angle@ degrees about the given time @rx,ry@
+rotateAround :: Show a => a -> a -> a -> AttributeValue
+rotateAround rotateAngle rx ry = toValue . join $
+  [ "rotate("
+  , show rotateAngle, ","
+  , show rx, ",", show ry
+  , ")"
+  ]
+
+skewX, skewY :: Show a => a -> AttributeValue
+
+-- | Skew tansformation along x-axis
+skewX skewAngle = toValue . join $
+  [ "skewX("
+  , show skewAngle
+  , ")"
+  ]
+
+-- | Skew tansformation along y-axis
+skewY skewAngle = toValue . join $
+  [ "skewY("
+  , show skewAngle
+  , ")"
+  ]
+
+-- | Specifies a transform in the form of a transformation matrix
+matrix :: Show a => a -> a -> a -> a -> a -> a -> AttributeValue
+matrix a b c_ d e f =  toValue . join $
+  [  "matrix("
+  ,  show a, ","
+  ,  show b, ","
+  ,  show c_, ","
+  ,  show d, ","
+  ,  show e, ","
+  ,  show f
+  , ")"
+  ]
