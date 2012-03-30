@@ -1,13 +1,12 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Example where
 import Text.Blaze.Svg11 ((!), mkPath, rotate, l, m)
 import qualified Text.Blaze.Svg11 as S
 import qualified Text.Blaze.Svg11.Attributes as A
-import Text.Blaze.Renderer.String (renderHtml)
+import Text.Blaze.Svg.Renderer.String (renderSvg)
 
 main :: IO ()
 main = do
-  let a = renderHtml svgDoc
+  let a = renderSvg svgDoc
   putStrLn a
 
 svgDoc :: S.Svg

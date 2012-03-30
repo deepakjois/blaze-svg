@@ -4,10 +4,9 @@ import Control.Monad.State
 import Data.Monoid (mappend, mempty)
 
 import Text.Blaze
-import Text.Blaze.Internal
 
 -- | Type to represent an SVG document fragment
-type Svg = HtmlM ()
+type Svg = Markup
 
 -- | Type to accumulate an SVG path
 type Path = State AttributeValue ()
