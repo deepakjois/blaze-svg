@@ -32,7 +32,7 @@ Library
   Build-depends:
     base            >= 4  && < 5,
     mtl             >= 2  && < 3,
-    blaze-markup    >= 0.1 && < 0.2
+    blaze-markup    >= 0.5 && < 0.6
 
 
 Source-repository head
