@@ -1,24 +1,31 @@
 [![Build Status](https://secure.travis-ci.org/deepakjois/blaze-svg.png)](http://travis-ci.org/deepakjois/blaze-svg)
 
-blaze-svg is a SVG combinator library, derived from [blaze-html]
-
+blaze-svg uses [blaze-markup] to provide a SVG combinator library. blaze-markup
+is a fast combinator library which was derived from [blaze-html].
+ 
+[blaze-markup]: http://github.com/jaspervdj/blaze-markup
 [blaze-html]: http://jaspervdj.be/blaze/
 
 ## Usage
 
-Here is a small example program that demonstrates its usage.
+Read the [blaze-html tutorial][tutorial] to get a better understanding of how to 
+construct markup documents using these combinators.
 
+[tutorial]: http://jaspervdj.be/blaze/tutorial.html
+
+Here is a small example program that demonstrates its usage.
+ 
 ```
 {-# LANGUAGE OverloadedStrings #-}
 module Example where
 import Text.Blaze.Svg11 ((!))
 import qualified Text.Blaze.Svg11 as S
 import qualified Text.Blaze.Svg11.Attributes as A
-import Text.Blaze.Renderer.String (renderHtml)
+import Text.Blaze.Svg.Renderer.String (renderSvg)
 
 main :: IO ()
 main = do
-  let a = renderHtml svgDoc
+  let a = renderSvg svgDoc
   putStrLn a
 
 svgDoc :: S.Svg
