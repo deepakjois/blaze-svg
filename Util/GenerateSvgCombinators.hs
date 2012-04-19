@@ -244,7 +244,7 @@ svg11 = SvgVariant
         ]
     , parents =
         [ "a","defs","glyph","g","marker","mask","missing-glyph","pattern", "svg"
-        , "switch", "symbol"
+        , "switch", "symbol", "linearGradient", "radialGradient"
         ]
     , leafs =
         [ "altGlyph", "altGlyphDef", "altGlyphItem", "animate", "animateColor"
@@ -258,8 +258,8 @@ svg11 = SvgVariant
         , "feSpotLight" , "feTile", "feTurbulence", "filter", "font"
         , "font-face", "font-face-format" , "font-face-name", "font-face-src"
         , "font-face-uri", "foreignObject" , "glyphRef", "hkern", "image"
-        , "line", "linearGradient" , "metadata", "mpath", "path"
-        , "polygon" , "polyline", "radialGradient", "rect", "script", "set"
+        , "line", "metadata", "mpath", "path"
+        , "polygon" , "polyline", "rect", "script", "set"
         , "stop", "style" , "text", "textPath", "title", "tref", "tspan", "use"
         , "view", "vkern"
         ]
