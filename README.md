@@ -2,20 +2,17 @@
 
 blaze-svg uses [blaze-markup] to provide a SVG combinator library. blaze-markup
 is a fast combinator library which was derived from [blaze-html].
- 
+
 [blaze-markup]: http://github.com/jaspervdj/blaze-markup
 [blaze-html]: http://jaspervdj.be/blaze/
 
-## Usage
+## Example Usage
 
-Read the [blaze-html tutorial][tutorial] to get a better understanding of how to 
-construct markup documents using these combinators.
+Look at the examples in the [Examples] folder.
 
-[tutorial]: http://jaspervdj.be/blaze/tutorial.html
+[Examples]: https://github.com/deepakjois/blaze-svg/tree/master/examples/
 
-Here is a small example program that demonstrates its usage.
- 
-```
+```haskell
 {-# LANGUAGE OverloadedStrings #-}
 module Example where
 import Text.Blaze.Svg11 ((!))
@@ -47,3 +44,9 @@ This produces the output below (formatted for readability)
   <rect width="1" height="2" fill="#d2232c" />
 </svg>
 ```
+
+## Documentation
+
+* [API Reference](http://hackage.haskell.org/package/blaze-svg)
+* [blaze-html Tutorial by Jasper][blaze-html]. Although this is more of a tutorial about _blaze-html_, a sister library to _blaze-svg_, it is still useful to get an overview of how to use the combinators.
+*

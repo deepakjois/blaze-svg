@@ -105,7 +105,7 @@ writeSvgVariant svgVariant = do
         , unlines (map makeAttribute sortedAttributes)
         ]
   where
-    basePath = "Text" </> "Blaze" </> foldl1 (</>) version'
+    basePath = "src" </> "Text" </> "Blaze" </> foldl1 (</>) version'
     modulName = getModuleName svgVariant
     attributeModuleName = getAttributeModuleName svgVariant
     attributes' = attributes svgVariant
@@ -172,8 +172,6 @@ makeDocTypeSvg lines' = unlines
     [ DO_NOT_EDIT
     , "-- | Combinator for the @\\<svg>@ element. This combinator will also"
     , "-- insert the correct doctype."
-    , "--"
-    , unlines (map ("-- > " ++) lines') ++ "-- > <svg><span>foo</span></svg>"
     , "--"
     , "docTypeSvg :: Svg  -- ^ Inner SVG."
     , "            -> Svg  -- ^ Resulting SVG."

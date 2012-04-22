@@ -1,3 +1,4 @@
+{-# OPTIONS_HADDOCK hide #-}
 module Text.Blaze.Svg.Internal where
 
 import Control.Monad.State
@@ -5,16 +6,16 @@ import Data.Monoid (mappend, mempty)
 
 import Text.Blaze
 
--- | Type to represent an SVG document fragment
+-- | Type to represent an SVG document fragment.
 type Svg = Markup
 
--- | Type to accumulate an SVG path
+-- | Type to accumulate an SVG path.
 type Path = State AttributeValue ()
 
 -- | Construct SVG path values using path instruction combinators.
 -- See simple example below of how you can use @mkPath@ to
 -- specify a path using the path instruction combinators
--- that are included as part of the same module
+-- that are included as part of the same module.
 --
 -- More information available at: <http://www.w3.org/TR/SVG/paths.html>
 --
@@ -218,9 +219,8 @@ rotateAround rotateAngle rx ry = toValue . join $
   , ")"
   ]
 
-skewX, skewY :: Show a => a -> AttributeValue
-
 -- | Skew tansformation along x-axis
+skewX :: Show a => a -> AttributeValue
 skewX skewAngle = toValue . join $
   [ "skewX("
   , show skewAngle
@@ -228,6 +228,7 @@ skewX skewAngle = toValue . join $
   ]
 
 -- | Skew tansformation along y-axis
+skewY :: Show a => a -> AttributeValue
 skewY skewAngle = toValue . join $
   [ "skewY("
   , show skewAngle

@@ -1,7 +1,6 @@
 name:                blaze-svg
-version:             0.3.0.0
+version:             0.3.0.1
 synopsis:            SVG combinator library
-description:         SVG combinator library
 homepage:            https://github.com/deepakjois/blaze-svg
 license:             BSD3
 license-file:        LICENSE
@@ -9,13 +8,29 @@ author:              Deepak Jois
 maintainer:          deepak.jois@gmail.com
 category:            Graphics
 build-type:          Simple
-cabal-version:       >=1.6
+cabal-version:       >=1.8
+description:
+  A blazingly fast SVG combinator library for the Haskell
+  programming language. The "Text.Blaze.SVG" module is a good
+  starting point.
+  .
+  Other documentation:
+  .
+  * Programs in the /examples/ folder of this project: <https://github.com/deepakjois/blaze-svg/tree/master/examples/>
+  .
+  * Jasper Van Der Jeugt has written  tutorial below is for /blaze-html/,
+    which is a sister library of /blaze-svg/, but gives a good overview
+    on how to use the  combinators in "Text.Blaze.Svg11" and
+    "Text.Blaze.Svg11.Attributes":
+    <http://jaspervdj.be/blaze/tutorial.html>.
 
 Extra-source-files:
-  Util/Sanitize.hs
-  Util/GenerateSvgCombinators.hs
+  src/Util/Sanitize.hs
+  src/Util/GenerateSvgCombinators.hs
+  examples/*.hs
 
 Library
+  Hs-Source-Dirs: src
   Ghc-Options:       -Wall
 
   Exposed-modules:
@@ -28,12 +43,10 @@ Library
     Text.Blaze.Svg.Renderer.Text
     Text.Blaze.Svg.Renderer.Utf8
 
-
   Build-depends:
     base            >= 4  && < 5,
     mtl             >= 2  && < 3,
     blaze-markup    >= 0.5 && < 0.6
-
 
 Source-repository head
   Type:     git
