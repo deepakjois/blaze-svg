@@ -1,6 +1,6 @@
 [![Build Status](https://secure.travis-ci.org/deepakjois/blaze-svg.png)](http://travis-ci.org/deepakjois/blaze-svg)
 
-blaze-svg uses [blaze-markup] to provide a SVG combinator library. blaze-markup
+_blaze-svg_ uses [blaze-markup] to provide a SVG combinator library. _blaze-markup_
 is a fast combinator library which was derived from [blaze-html].
 
 [blaze-markup]: http://github.com/jaspervdj/blaze-markup
