@@ -1,5 +1,5 @@
 {-# OPTIONS_GHC -fno-warn-missing-signatures #-}
--- | A renderer that produces a lazy 'L.Text' value, using the Text Builder.
+-- | A renderer that produces a lazy 'Text' value, using the Text Builder.
 --
 module Text.Blaze.Svg.Renderer.Text
     ( renderSvg
