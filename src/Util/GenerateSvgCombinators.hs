@@ -242,12 +242,12 @@ svg11 = SvgVariant
         ]
     , parents =
         [ "a","defs","glyph","g","marker","mask","missing-glyph","pattern", "svg"
-        , "switch", "symbol", "linearGradient", "radialGradient"
+        , "switch", "symbol", "linearGradient", "radialGradient", "clipPath"
         ]
     , leafs =
         [ "altGlyph", "altGlyphDef", "altGlyphItem", "animate", "animateColor"
-        , "animateMotion", "animateTransform", "circle", "clipPath"
-        , "color-profile" , "cursor", "desc", "ellipse", "feBlend"
+        , "animateMotion", "animateTransform", "circle", "color-profile"
+        , "cursor", "desc", "ellipse", "feBlend"
         , "feColorMatrix", "feComponentTransfer" , "feComposite"
         , "feConvolveMatrix", "feDiffuseLighting", "feDisplacementMap"
         , "feDistantLight", "feFlood", "feFuncA", "feFuncB" , "feFuncG"
