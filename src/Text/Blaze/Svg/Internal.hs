@@ -25,7 +25,7 @@ type Path = State AttributeValue ()
 -- >
 -- > svgDoc :: S.Svg
 -- > svgDoc = S.docTypeSvg ! A.version "1.1" ! A.width "150" ! A.height "100" $ do
--- >  path ! A.d makeSimplePath
+-- >  S.path ! A.d makeSimplePath
 -- >
 -- > makeSimplePath :: S.AttributeValue
 -- > makeSimplePath =  mkPath do
