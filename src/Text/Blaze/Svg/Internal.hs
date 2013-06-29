@@ -114,7 +114,7 @@ c c1x c1y c2x c2y x y = appendToPath
   , " "
   , show c2x, ",", show c2y
   , " "
-  , show x, " ", show y
+  , show x, ",", show y
   ]
 
 -- | Cubic Bezier curve (relative)
@@ -125,7 +125,7 @@ cr dc1x dc1y dc2x dc2y dx dy = appendToPath
   , " "
   , show dc2x, ",", show dc2y
   , " "
-  , show dx, " ", show dy
+  , show dx, ",", show dy
   ]
 
 -- | Smooth Cubic Bezier curve
