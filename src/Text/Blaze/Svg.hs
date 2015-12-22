@@ -15,6 +15,8 @@ module Text.Blaze.Svg
     , c, cr, s, sr
     -- ** The quadratic Bézier curve commands
     , q, qr, t, tr
+    -- ** Elliptical arc
+    , ar
     -- * SVG Transform combinators
     , translate, rotate, rotateAround, scale
     , skewX, skewY

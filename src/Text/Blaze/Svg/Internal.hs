@@ -2,8 +2,6 @@
 module Text.Blaze.Svg.Internal where
 
 import Control.Monad.State
-import Data.Monoid (mappend, mempty)
-
 import Text.Blaze
 
 -- | Type to represent an SVG document fragment.
@@ -184,6 +182,44 @@ tr x y = appendToPath
   , " "
   , show x, ",", show y
   , " "
+  ]
+ 
+-- | Elliptical Arc (absolute)
+a
+  :: Show a
+  => a -- ^ Radius in the x-direction
+  -> a -- ^ Radius in the y-direction
+  -> Int -- ^ The rotation of the arc's x-axis compared to the normal x-axis
+  -> Int -- ^ Draw the smaller or bigger arc satisfying the start point
+  -> Int -- ^ To mirror or not
+  -> a -- ^ The x-coordinate of the end point
+  -> a -- ^ The y-coordinate of the end point
+  -> Path
+a rx ry xAxisRotation largeArcFlag sweepFlag x y = appendToPath
+  [ "A "
+  , show rx, ",", show ry, " "
+  , show xAxisRotation, " "
+  , show largeArcFlag, ",", show sweepFlag, " "
+  , show x, ",", show y, " "
+  ]
+
+-- | Elliptical Arc (relative)
+ar
+  :: Show a
+  => a -- ^ Radius in the x-direction
+  -> a -- ^ Radius in the y-direction
+  -> Int -- ^ The rotation of the arc's x-axis compared to the normal x-axis
+  -> Int -- ^ Draw the smaller or bigger arc satisfying the start point
+  -> Int -- ^ To mirror or not
+  -> a -- ^ The x-coordinate of the end point
+  -> a -- ^ The y-coordinate of the end point
+  -> Path
+ar rx ry xAxisRotation largeArcFlag sweepFlag x y = appendToPath
+  [ "a "
+  , show rx, ",", show ry, " "
+  , show xAxisRotation, " "
+  , show largeArcFlag, ",", show sweepFlag, " "
+  , show x, ",", show y, " "
   ]
 
 -- | Specifies a translation by @x@ and @y@
