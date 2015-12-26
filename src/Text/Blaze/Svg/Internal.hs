@@ -2,6 +2,8 @@
 module Text.Blaze.Svg.Internal where
 
 import Control.Monad.State
+import Data.Monoid (mappend, mempty)
+
 import Text.Blaze
 
 -- | Type to represent an SVG document fragment.
@@ -185,7 +187,7 @@ tr x y = appendToPath
   ]
  
 -- | Elliptical Arc (absolute)
-a
+aAbs
   :: Show a
   => a -- ^ Radius in the x-direction
   -> a -- ^ Radius in the y-direction
@@ -195,7 +197,7 @@ a
   -> a -- ^ The x-coordinate of the end point
   -> a -- ^ The y-coordinate of the end point
   -> Path
-a rx ry xAxisRotation largeArcFlag sweepFlag x y = appendToPath
+aAbs rx ry xAxisRotation largeArcFlag sweepFlag x y = appendToPath
   [ "A "
   , show rx, ",", show ry, " "
   , show xAxisRotation, " "
