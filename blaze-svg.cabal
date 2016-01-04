@@ -28,6 +28,7 @@ Extra-source-files:
   src/Util/Sanitize.hs
   src/Util/GenerateSvgCombinators.hs
   examples/*.hs
+  CHANGES.md
 
 Library
   Hs-Source-Dirs: src
