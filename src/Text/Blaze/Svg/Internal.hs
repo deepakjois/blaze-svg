@@ -186,18 +186,35 @@ tr x y = appendToPath
   , " "
   ]
  
--- | Elliptical Arc (absolute)
-aAbs
+-- | Elliptical Arc (absolute). This function is an alias for 'a' defined in
+-- this module. It is defined so that it can be exported instead of the a
+-- function due to naming conflicts with 'Text.Blaze.SVG11.a'.
+aa
   :: Show a
   => a -- ^ Radius in the x-direction
   -> a -- ^ Radius in the y-direction
-  -> Int -- ^ The rotation of the arc's x-axis compared to the normal x-axis
-  -> Int -- ^ Draw the smaller or bigger arc satisfying the start point
-  -> Int -- ^ To mirror or not
+  -> a -- ^ The rotation of the arc's x-axis compared to the normal x-axis
+  -> a -- ^ Draw the smaller or bigger arc satisfying the start point
+  -> a -- ^ To mirror or not
   -> a -- ^ The x-coordinate of the end point
   -> a -- ^ The y-coordinate of the end point
   -> Path
-aAbs rx ry xAxisRotation largeArcFlag sweepFlag x y = appendToPath
+aa = a
+
+-- | Elliptical Arc (absolute). This is the internal definition for absolute
+-- arcs. It is not exported but instead exported as 'aa' due to naming
+-- conflicts with 'Text.Blaze.SVG11.a'.
+a
+  :: Show a
+  => a -- ^ Radius in the x-direction
+  -> a -- ^ Radius in the y-direction
+  -> a -- ^ The rotation of the arc's x-axis compared to the normal x-axis
+  -> a -- ^ Draw the smaller or bigger arc satisfying the start point
+  -> a -- ^ To mirror or not
+  -> a -- ^ The x-coordinate of the end point
+  -> a -- ^ The y-coordinate of the end point
+  -> Path
+a rx ry xAxisRotation largeArcFlag sweepFlag x y = appendToPath
   [ "A "
   , show rx, ",", show ry, " "
   , show xAxisRotation, " "
@@ -210,9 +227,9 @@ ar
   :: Show a
   => a -- ^ Radius in the x-direction
   -> a -- ^ Radius in the y-direction
-  -> Int -- ^ The rotation of the arc's x-axis compared to the normal x-axis
-  -> Int -- ^ Draw the smaller or bigger arc satisfying the start point
-  -> Int -- ^ To mirror or not
+  -> a -- ^ The rotation of the arc's x-axis compared to the normal x-axis
+  -> a -- ^ Draw the smaller or bigger arc satisfying the start point
+  -> a -- ^ To mirror or not
   -> a -- ^ The x-coordinate of the end point
   -> a -- ^ The y-coordinate of the end point
   -> Path
@@ -275,9 +292,9 @@ skewY skewAngle = toValue . join $
 
 -- | Specifies a transform in the form of a transformation matrix
 matrix :: Show a => a -> a -> a -> a -> a -> a -> AttributeValue
-matrix a b c_ d e f =  toValue . join $
+matrix a_ b c_ d e f =  toValue . join $
   [  "matrix("
-  ,  show a, ","
+  ,  show a_, ","
   ,  show b, ","
   ,  show c_, ","
   ,  show d, ","
