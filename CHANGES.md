@@ -1,3 +1,8 @@
+0.3.5 (4 January 2016)
+----------------------
+
+* Added support for elliptical arcs (aa, ar)
+
 0.3.4.1 (24 February 2015)
 --------------------------
 
