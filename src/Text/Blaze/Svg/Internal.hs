@@ -194,8 +194,8 @@ aa
   => a -- ^ Radius in the x-direction
   -> a -- ^ Radius in the y-direction
   -> a -- ^ The rotation of the arc's x-axis compared to the normal x-axis
-  -> a -- ^ Draw the smaller or bigger arc satisfying the start point
-  -> a -- ^ To mirror or not
+  -> Bool -- ^ Draw the smaller or bigger arc satisfying the start point
+  -> Bool -- ^ To mirror or not
   -> a -- ^ The x-coordinate of the end point
   -> a -- ^ The y-coordinate of the end point
   -> Path
@@ -209,8 +209,8 @@ a
   => a -- ^ Radius in the x-direction
   -> a -- ^ Radius in the y-direction
   -> a -- ^ The rotation of the arc's x-axis compared to the normal x-axis
-  -> a -- ^ Draw the smaller or bigger arc satisfying the start point
-  -> a -- ^ To mirror or not
+  -> Bool -- ^ Draw the smaller or bigger arc satisfying the start point
+  -> Bool -- ^ To mirror or not
   -> a -- ^ The x-coordinate of the end point
   -> a -- ^ The y-coordinate of the end point
   -> Path
@@ -218,7 +218,7 @@ a rx ry xAxisRotation largeArcFlag sweepFlag x y = appendToPath
   [ "A "
   , show rx, ",", show ry, " "
   , show xAxisRotation, " "
-  , show largeArcFlag, ",", show sweepFlag, " "
+  , if largeArcFlag then "1" else "0", ",", if sweepFlag then "1" else "0", " "
   , show x, ",", show y, " "
   ]
 
@@ -228,8 +228,8 @@ ar
   => a -- ^ Radius in the x-direction
   -> a -- ^ Radius in the y-direction
   -> a -- ^ The rotation of the arc's x-axis compared to the normal x-axis
-  -> a -- ^ Draw the smaller or bigger arc satisfying the start point
-  -> a -- ^ To mirror or not
+  -> Bool -- ^ Draw the smaller or bigger arc satisfying the start point
+  -> Bool -- ^ To mirror or not
   -> a -- ^ The x-coordinate of the end point
   -> a -- ^ The y-coordinate of the end point
   -> Path
@@ -237,7 +237,7 @@ ar rx ry xAxisRotation largeArcFlag sweepFlag x y = appendToPath
   [ "a "
   , show rx, ",", show ry, " "
   , show xAxisRotation, " "
-  , show largeArcFlag, ",", show sweepFlag, " "
+  , if largeArcFlag then "1" else "0", ",", if sweepFlag then "1" else "0", " "
   , show x, ",", show y, " "
   ]
 
