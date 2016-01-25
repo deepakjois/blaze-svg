@@ -209,7 +209,7 @@ a
   => a -- ^ Radius in the x-direction
   -> a -- ^ Radius in the y-direction
   -> a -- ^ The rotation of the arc's x-axis compared to the normal x-axis
-  -> Bool -- ^ Draw the smaller or bigger arc satisfying the start point
+  -> Bool -- ^ True to draw the larger of the two arcs satisfying constraints.
   -> Bool -- ^ To mirror or not
   -> a -- ^ The x-coordinate of the end point
   -> a -- ^ The y-coordinate of the end point
@@ -228,7 +228,7 @@ ar
   => a -- ^ Radius in the x-direction
   -> a -- ^ Radius in the y-direction
   -> a -- ^ The rotation of the arc's x-axis compared to the normal x-axis
-  -> Bool -- ^ Draw the smaller or bigger arc satisfying the start point
+  -> Bool -- ^ True to draw the larger of the two arcs satisfying constraints.
   -> Bool -- ^ To mirror or not
   -> a -- ^ The x-coordinate of the end point
   -> a -- ^ The y-coordinate of the end point
