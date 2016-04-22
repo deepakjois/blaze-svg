@@ -1,10 +1,9 @@
-{-# OPTIONS_HADDOCK hide #-}
 module Text.Blaze.Svg.Internal where
 
-import Control.Monad.State
-import Data.Monoid (mappend, mempty)
+import           Control.Monad.State
+import           Data.Monoid         (mappend, mempty)
 
-import Text.Blaze
+import           Text.Blaze
 
 -- | Type to represent an SVG document fragment.
 type Svg = Markup
@@ -185,10 +184,14 @@ tr x y = appendToPath
   , show x, ",", show y
   , " "
   ]
- 
--- | Elliptical Arc (absolute). This function is an alias for 'a' defined in
--- this module. It is defined so that it can be exported instead of the a
--- function due to naming conflicts with 'Text.Blaze.SVG11.a'.
+
+-- | Elliptical Arc (absolute).
+--
+--   Note that this function is an alias for the function
+--   'Text.Blaze.Svg.Internal.a', defined in
+--   "Text.Blaze.Svg.Internal". 'aa' is exported from "Text.Blaze.Svg"
+--   instead of 'a' due to naming conflicts with 'Text.Blaze.SVG11.a'
+--   from "Text.Blaze.SVG11".
 aa
   :: Show a
   => a -- ^ Radius in the x-direction
@@ -202,8 +205,8 @@ aa
 aa = a
 
 -- | Elliptical Arc (absolute). This is the internal definition for absolute
--- arcs. It is not exported but instead exported as 'aa' due to naming
--- conflicts with 'Text.Blaze.SVG11.a'.
+--   arcs. It is not exported but instead exported as 'aa' due to naming
+--   conflicts with 'Text.Blaze.SVG11.a'.
 a
   :: Show a
   => a -- ^ Radius in the x-direction
