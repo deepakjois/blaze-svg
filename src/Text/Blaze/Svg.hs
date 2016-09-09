@@ -3,6 +3,7 @@ module Text.Blaze.Svg
     (
       Svg
     , Path
+    , toSvg
     -- * SVG Path combinators
     , mkPath
     -- ** \"moveto\" commands
