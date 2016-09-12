@@ -11,7 +11,7 @@ module Text.Blaze.Svg
     , z
     -- ** \"lineto\" commands
     , l, lr, h, hr, v, vr
-    -- ** The cubic Bézier curve commands   
+    -- ** The cubic Bézier curve commands
     , c, cr, s, sr
     -- ** The quadratic Bézier curve commands
     , q, qr, t, tr
