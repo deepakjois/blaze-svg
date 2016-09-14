@@ -8,6 +8,9 @@ import           Text.Blaze
 -- | Type to represent an SVG document fragment.
 type Svg = Markup
 
+toSvg :: ToMarkup a => a -> Svg
+toSvg = toMarkup
+
 -- | Type to accumulate an SVG path.
 type Path = State AttributeValue ()
 
