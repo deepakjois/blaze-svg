@@ -241,9 +241,10 @@ svg11 = SvgVariant
         , "    \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">"
         ]
     , parents =
-        [ "a","defs","glyph","g","marker","mask","missing-glyph","pattern", "svg"
-        , "switch", "symbol", "linearGradient", "radialGradient", "clipPath", "text"
-        , "altGlyph", "desc", "foreignObject", "metadata", "script", "style", "textPath", "title", "tspan"
+        [ "a", "altGlyph", "clipPath", "defs", "desc", "foreignObject", "g"
+        , "glyph", "linearGradient", "marker", "mask", "metadata"
+        , "missing-glyph", "pattern", "radialGradient", "script", "style"
+        , "svg", "switch", "symbol", "text", "textPath", "title", "tspan"
         ]
     , leafs =
         [ "altGlyphDef", "altGlyphItem", "animate", "animateColor"
