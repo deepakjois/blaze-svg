@@ -243,11 +243,12 @@ svg11 = SvgVariant
     , parents =
         [ "a","defs","glyph","g","marker","mask","missing-glyph","pattern", "svg"
         , "switch", "symbol", "linearGradient", "radialGradient", "clipPath", "text"
+        , "altGlyph", "desc", "foreignObject", "metadata", "script", "style", "textPath", "title", "tspan"
         ]
     , leafs =
-        [ "altGlyph", "altGlyphDef", "altGlyphItem", "animate", "animateColor"
+        [ "altGlyphDef", "altGlyphItem", "animate", "animateColor"
         , "animateMotion", "animateTransform", "circle", "color-profile"
-        , "cursor", "desc", "ellipse", "feBlend"
+        , "cursor", "ellipse", "feBlend"
         , "feColorMatrix", "feComponentTransfer" , "feComposite"
         , "feConvolveMatrix", "feDiffuseLighting", "feDisplacementMap"
         , "feDistantLight", "feFlood", "feFuncA", "feFuncB" , "feFuncG"
@@ -255,10 +256,10 @@ svg11 = SvgVariant
         , "feMorphology", "feOffset", "fePointLight", "feSpecularLighting"
         , "feSpotLight" , "feTile", "feTurbulence", "filter", "font"
         , "font-face", "font-face-format" , "font-face-name", "font-face-src"
-        , "font-face-uri", "foreignObject" , "glyphRef", "hkern", "image"
-        , "line", "metadata", "mpath", "path"
-        , "polygon" , "polyline", "rect", "script", "set"
-        , "stop", "style", "textPath", "title", "tref", "tspan", "use"
+        , "font-face-uri", "glyphRef", "hkern", "image"
+        , "line", "mpath", "path"
+        , "polygon" , "polyline", "rect", "set"
+        , "stop", "tref", "use"
         , "view", "vkern"
         ]
     , attributes =
