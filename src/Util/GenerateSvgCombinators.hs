@@ -241,13 +241,15 @@ svg11 = SvgVariant
         , "    \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">"
         ]
     , parents =
-        [ "a","defs","glyph","g","marker","mask","missing-glyph","pattern", "svg"
-        , "switch", "symbol", "linearGradient", "radialGradient", "clipPath", "text" 
+        [ "a", "altGlyph", "clipPath", "defs", "desc", "foreignObject", "g"
+        , "glyph", "linearGradient", "marker", "mask", "metadata"
+        , "missing-glyph", "pattern", "radialGradient", "script", "style"
+        , "svg", "switch", "symbol", "text", "textPath", "title", "tspan"
         ]
     , leafs =
-        [ "altGlyph", "altGlyphDef", "altGlyphItem", "animate", "animateColor"
+        [ "altGlyphDef", "altGlyphItem", "animate", "animateColor"
         , "animateMotion", "animateTransform", "circle", "color-profile"
-        , "cursor", "desc", "ellipse", "feBlend"
+        , "cursor", "ellipse", "feBlend"
         , "feColorMatrix", "feComponentTransfer" , "feComposite"
         , "feConvolveMatrix", "feDiffuseLighting", "feDisplacementMap"
         , "feDistantLight", "feFlood", "feFuncA", "feFuncB" , "feFuncG"
@@ -255,10 +257,10 @@ svg11 = SvgVariant
         , "feMorphology", "feOffset", "fePointLight", "feSpecularLighting"
         , "feSpotLight" , "feTile", "feTurbulence", "filter", "font"
         , "font-face", "font-face-format" , "font-face-name", "font-face-src"
-        , "font-face-uri", "foreignObject" , "glyphRef", "hkern", "image"
-        , "line", "metadata", "mpath", "path"
-        , "polygon" , "polyline", "rect", "script", "set"
-        , "stop", "style" , "textPath", "title", "tref", "tspan", "use"
+        , "font-face-uri", "glyphRef", "hkern", "image"
+        , "line", "mpath", "path"
+        , "polygon" , "polyline", "rect", "set"
+        , "stop", "tref", "use"
         , "view", "vkern"
         ]
     , attributes =
