@@ -47,7 +47,7 @@ Library
   Build-depends:
     base            >= 4  && < 5,
     mtl             >= 2  && < 3,
-    blaze-markup    >= 0.5 && < 0.8
+    blaze-markup    >= 0.5 && < 0.9
 
 Source-repository head
   Type:     git
