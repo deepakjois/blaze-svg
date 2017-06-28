@@ -67,6 +67,7 @@ writeSvgVariant svgVariant = do
     -- Write the main module.
     writeFile' (basePath <.> "hs") $ removeTrailingNewlines $ unlines
         [ DO_NOT_EDIT
+        , "{-# LANGUAGE CPP #-}"
         , "{-# LANGUAGE OverloadedStrings #-}"
         , "-- | This module exports SVG combinators used to create documents."
         , "--"
@@ -85,6 +86,16 @@ writeSvgVariant svgVariant = do
         , makeDocType $ docType svgVariant
         , makeDocTypeSvg $ docType svgVariant
         , unlines appliedTags
+        , DO_NOT_EDIT
+        , "leaf :: StaticString -> StaticString -> StaticString -> Svg"
+        , "#if MIN_VERSION_blaze_markup(0,8,0)"
+        , "leaf tag open close = Leaf tag open close ()"
+        , "#else"
+        , "leaf = Leaf"
+        , "#endif"
+        , "{-# INLINE leaf #-}"
+        , ""
+        , ""
         ]
 
     let sortedAttributes = sort attributes'
@@ -206,7 +217,7 @@ makeLeaf closing tag = unlines
     , "-- | Combinator for the @\\<" ++ tag ++ " />@ element."
     , "--"
     , function ++ " :: Svg  -- ^ Resulting SVG."
-    , function ++ " = Leaf \"" ++ tag ++ "\" \"<" ++ tag ++ "\" " ++ "\""
+    , function ++ " = leaf \"" ++ tag ++ "\" \"<" ++ tag ++ "\" " ++ "\""
                ++ (if closing then " /" else "") ++ ">\""
     , "{-# INLINE " ++ function ++ " #-}"
     ]
